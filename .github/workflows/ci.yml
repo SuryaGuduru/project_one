@@ -1,0 +1,40 @@
+name: Python CI Pipeline
+
+# Trigger this pipeline whenever code is pushed or a PR is opened against 'main'
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Step 1: Download your code onto the GitHub server
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      
+    # Step 2: Install Python
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        cache: 'pip' # This speeds up future runs by caching downloads
+        
+    # Step 3: Install your project requirements
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    # Step 4: Run the Ruff linter to catch formatting errors
+    - name: Run Linter (Ruff)
+      run: |
+        ruff check .
+        
+    # Step 5: Run your test_main.py script
+    - name: Run Tests (Pytest)
+      run: |
+        pytest test_main.py
