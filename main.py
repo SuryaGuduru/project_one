@@ -21,5 +21,5 @@ def retrieve_context(request: QueryRequest):
     ]
     return {
         "query": request.query,
-        "results": simulated_db[:request.top_k]
+        "results": simulated_db[:request.top_k-1]
     }
